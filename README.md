@@ -13,10 +13,31 @@ A collaborative webapp for tabletop games.
 * I may want the app to assist in setting the mood with sounds
 * I may want the app to include video/voice feeds for remote players
 
-### Design Notes
+## Design Notes
 Since some players will be joining remotely, the app should enable the kinds of interactions that are non-issues in person. It is a means to share a common understanding of the game in session. Therefore it needs to be simple and painless enough to encourage this sharing.
 
-Aim for one-touch/click
+Aim for one-touch/click interactions.
 
-### Implementation Notes
-Look into WebRTC for the video support
+## Implementation Notes
+* Look into WebRTC for the video support
+
+## Local Development
+Node.js and gulp are required to run and build the project.
+
+```sh
+# install build and runtime dependencies
+$ npm install
+
+# build static client assets
+$ gulp
+
+# run the server
+$ npm start
+$ open http://localhost:8080
+```
+
+You may also wish to live-rebuild client assets during development:
+
+```sh
+$ gulp dev
+```

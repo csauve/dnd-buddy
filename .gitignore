@@ -1,4 +1,4 @@
 node_modules
-dist/*.css
-dist/*.js
-dist/*.map
+static/*.css
+static/*.js
+static/*.map
