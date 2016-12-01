@@ -24,7 +24,7 @@ Login is a simple selection of campaign and providing a user name. The login scr
 ### Pages
 The app shall implement a basic tiling window manager in the browser, allowing each user/device to have a customized view of a set of available "Pages". The user is notified of changes to pages not in their view. The contents of pages are synchronized between users and persisted on the server, while the user's views are not.
 
-The UI will need functionality to display available pages create new ones by choosing from the set of available types. Once created, they are added to the user's view. Removing the page from the user's view does not delete the page itself, with the exception of webcam pages.
+The UI will need functionality to display available pages and create new ones by choosing from the set of available types. Once created, they are added to the user's view. Removing the page from the user's view does not delete the page itself, with the exception of webcam pages.
 
 View management should make efficient use of space for small screen sizes. This means hiding/avoiding bars, tabs, etc. unless contextually relevant to the task of view management. During normal usage, the app should focus on page content. Consider using common and simple gestures for view management that do not conflict with individual page interactions.
 

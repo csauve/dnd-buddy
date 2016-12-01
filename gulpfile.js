@@ -10,7 +10,7 @@ const SRC_DIR = "./client";
 const DST_DIR = "./static";
 
 gulp.task("build-js", function() {
-  return browserify(`${SRC_DIR}/app.jsx`, {debug: true})
+  return browserify(`${SRC_DIR}/app.jsx`, {debug: true, extensions: [".jsx"]})
     .transform("babelify")
     .bundle()
     .pipe(source("bundle.js"))
