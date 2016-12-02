@@ -1,8 +1,35 @@
 .view-manager {
-
-
+  display: flex;
+  height: 100%;
+  width: 100%;
 
   .view-panel {
-    background: red;
+    flex-grow: 1;
+  }
+}
+
+@media all and (orientation: portrait) {
+  .view-manager {
+    flex-direction: column;
+
+    .view-panel {
+      border-bottom: 1px solid #000;
+      &:last-of-type {
+        border-bottom: none;
+      }
+    }
+  }
+}
+
+@media all and (orientation: landscape) {
+  .view-manager {
+    flex-direction: row;
+
+    .view-panel {
+      border-right: 1px solid #000;
+      &:last-of-type {
+        border-right: none;
+      }
+    }
   }
 }

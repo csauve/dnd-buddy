@@ -1,9 +1,12 @@
 @import "./components/ViewManager/ViewManager";
 
+* {
+  padding: 0;
+  margin: 0;
+}
 
-
-#test-device {
-  width: 400px;
-  height: 600px;
-  border: 1px solid black;
+.app-container {
+  height: 100%;
+  width: 100%;
+  position: absolute;
 }
