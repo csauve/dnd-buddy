@@ -19,6 +19,8 @@
     "gulp-sourcemaps": "^2.2.0",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
+    "roll": "^1.2.0",
+    "shake.js": "^1.2.2",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
   },
