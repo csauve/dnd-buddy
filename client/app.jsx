@@ -1,20 +1,28 @@
 import React, {Component} from "react";
 import ReactDOM from "react-dom";
-import ViewManager from "./components/ViewManager/ViewManager.jsx";
+import PageManager from "./components/PageManager/PageManager.jsx";
 import uuid from "uuid";
 
 class App extends Component {
   state = {
-    availablePages: {
-      [`${uuid.v4()}`]: {type: "Test"},
-      [`${uuid.v4()}`]: {type: "Test"},
-    }
+    availablePages: [
+      {pageId: uuid.v4(), type: "canvas"},
+      {pageId: uuid.v4(), type: "canvas"},
+    ]
+  }
+
+  componentDidMount() {
+    //stop touch events from scrolling the page on mobile devices -- events should go to the canvas
+    const ignore = (e) => { e.preventDefault() };
+    const body = document.querySelector("body");
+    body.addEventListener("touchstart", ignore);
+    body.addEventListener("touchmove", ignore);
   }
 
   render() {
     return (
       <main className="app-container">
-        <ViewManager availablePages={this.state.availablePages}/>
+        <PageManager availablePages={this.state.availablePages}/>
       </main>
     );
   }

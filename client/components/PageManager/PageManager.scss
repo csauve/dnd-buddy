@@ -1,18 +1,19 @@
-.view-manager {
+.page-manager {
   display: flex;
   height: 100%;
   width: 100%;
 
-  .view-panel {
+  .page {
     flex-grow: 1;
+    position: relative;
   }
 }
 
 @media all and (orientation: portrait) {
-  .view-manager {
+  .page-manager {
     flex-direction: column;
 
-    .view-panel {
+    .page {
       border-bottom: 1px solid #000;
       &:last-of-type {
         border-bottom: none;
@@ -22,10 +23,10 @@
 }
 
 @media all and (orientation: landscape) {
-  .view-manager {
+  .page-manager {
     flex-direction: row;
 
-    .view-panel {
+    .page {
       border-right: 1px solid #000;
       &:last-of-type {
         border-right: none;
