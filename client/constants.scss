@@ -1,0 +1,54 @@
+@font-face {
+  font-family: "Roboto";
+  src: url("vendor/fonts/Roboto/Roboto-Medium.ttf") format("truetype")
+}
+
+@font-face {
+  font-family: "Roboto_Slab";
+  src: url("vendor/fonts/Roboto_Slab/RobotoSlab-Regular.ttf") format("truetype")
+}
+
+@mixin backdrop-filter($filter) {
+  -webkit-backdrop-filter: $filter;
+  -moz-backdrop-filter: $filter;
+  -ms-backdrop-filter: $filter;
+  backdrop-filter: $filter;
+}
+
+$main-font-family: "Roboto", Arial, sans-serif;
+$main-font-size: 20pt;
+
+$title-font-size: 28pt;
+$title-font-family: "Roboto_Slab", Arial, sans-serif;
+$title-padding: 20px;
+
+$giant-font-size: 48pt;
+
+$interface-bg: #fff;
+$interface-border: 1px solid #000;
+
+$floating-interface-bg: rgba(255,255,255,0.5);
+$floating-interface-radius: 8px;
+
+.panel {
+  background: $interface-bg;
+  border: $interface-border;
+  border-radius: $floating-interface-radius;
+
+  &.floating {
+    background: $floating-interface-bg;
+    @include backdrop-filter(blur(5px));
+  }
+}
+
+.panel-body {
+  padding: $title-padding;
+  display: block;
+}
+
+.panel-header {
+  border-bottom: $interface-border;
+  display: block;
+  padding: $title-padding;
+  font-size: $title-font-size;
+}

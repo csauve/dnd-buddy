@@ -50,7 +50,7 @@ export default class CanvasPage extends Component {
 
   componentDidMount() {
     const canvas = this.refs.canvas;
-    canvas.setAttribute('touch-action', 'none'); //required for polyfill
+    canvas.setAttribute("touch-action", "none"); //required for polyfill
 
     canvas.addEventListener("pointermove", this.handlePointerMove, false);
     canvas.addEventListener("pointerdown", this.handlePointerDown, false);
