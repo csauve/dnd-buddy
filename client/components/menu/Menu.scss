@@ -1,0 +1,87 @@
+.main-menu {
+  position: absolute;
+  bottom: 0;
+  z-index: 10;
+  width: 100%;
+  display: flex;
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: auto;
+  flex-direction: row;
+
+  .menu-section {
+    background: $accent-color;
+    color: $light-text-color;
+    flex-grow: 0;
+    flex-shrink: 1;
+    flex-basis: auto;
+    height: 40px;
+    transition: all $anim-period;
+    border-right: 1px solid darken($accent-color, 10%);
+    border-top: 1px solid darken($accent-color, 10%);
+
+    .icon-button {
+      float: left;
+      cursor: pointer;
+      padding: $interface-padding;
+      width: 2em;
+      height: 100%;
+
+      .fa {
+        padding-top: 2px;
+        text-align: center;
+        display: block;
+      }
+    }
+
+    &:last-of-type {
+      border-right: none;
+    }
+
+    &.active {
+      flex-grow: 1;
+    }
+
+    &.inactive {
+      background: lighten($accent-color, 10%);
+      color: darken($accent-color, 10%);
+    }
+
+    &.inactive .children-container {
+      display: none;
+    }
+
+    .children-container {
+      padding-top: $interface-padding;
+
+      .settings-list {
+        display: flex;
+      }
+
+      .setting {
+        margin-right: $interface-padding;
+        flex-grow: 1;
+      }
+    }
+  }
+
+  input {
+    width: 100%;
+    border: none;
+    border-radius: 0;
+    font-size: $main-font-size;
+    color: $light-text-color;
+    border-bottom: 2px solid $light-text-color;
+    background: none;
+  }
+
+  button {
+    border-radius: 4px;
+    border: none;
+    background: $light-text-color;
+    color: $accent-color;
+    font-weight: bold;
+    padding: $interface-padding/2 $interface-padding;
+    cursor: pointer;
+  }
+}

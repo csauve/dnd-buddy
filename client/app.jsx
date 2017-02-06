@@ -1,83 +1,86 @@
 import React, {Component} from "react";
 import ReactDOM from "react-dom";
-import PageManager from "./components/PageManager/PageManager.jsx";
-import Overlay from "./components/Overlay/Overlay.jsx";
+import CanvasPage from "./components/canvas/CanvasPage.jsx";
+import Overlay from "./components/overlay/Overlay.jsx";
+import Menu from "./components/menu/Menu.jsx";
 import uuid from "uuid";
 import Shake from "shake.js";
-import Roll from "roll";
+import socketClient from "socket.io-client";
 
-const roll = new Roll();
-
-const overlayMessageDuration = 3000;
-const shakeThreshold = 8;
+const config = {
+  rollMessageDuration: 3000,
+  shakeThreshold: 8,
+  socketEndpoint: "/"
+};
 
 class App extends Component {
   state = {
-    availablePages: [
-      {pageId: uuid.v4(), type: "canvas"},
-      {pageId: uuid.v4(), type: "canvas"},
-    ],
-    overlayMessages: []
+    rolls: [],
+    settings: {
+      userName: "Player",
+      defaultRoll: "d20",
+      activeMenu: "name"
+    },
+    canvasData: null
   }
 
-  publishOverlayMessage(message) {
-    //todo: publish this across users via server
-    this.handleReceiveOverlayMessage(message);
-  }
-
-  handleReceiveOverlayMessage(message) {
+  handleRollResult = (result) => {
     this.setState({
-      overlayMessages: this.state.overlayMessages.concat([message])
+      rolls: this.state.rolls.concat([result])
     });
     setTimeout(
-      () => {this.clearOverlayMessage(message.messageId)},
-      overlayMessageDuration
+      () => {
+        this.setState({
+          rolls: this.state.rolls.filter((roll) => roll.rollId != result.rollId)
+        });
+      },
+      config.rollMessageDuration
     );
   }
 
-  clearOverlayMessage(messageId) {
-    this.setState({
-      overlayMessages: this.state.overlayMessages.filter((message) => message.messageId != messageId)
+  publishRoll = (e) => {
+    if (!this.state.settings.defaultRoll) return;
+    this.state.socket.emit("roll", {
+      userName: this.state.settings.userName,
+      roll: this.state.settings.defaultRoll
     });
   }
 
-  publishRoll = (e) => {
-    const message = {
-      message: roll.roll("d20").result,
-      from: "test-user",
-      messageId: uuid.v4()
-    };
+  handleSettingsChanged = (settings) => {
+    this.setState({settings});
+  }
 
-    this.publishOverlayMessage(message);
+  handleCanvasUpdate = (update) => {
+    console.log("received canvas update");
   }
 
   componentDidMount() {
-    //stop touch events from scrolling the page on mobile devices -- events should go to the canvas
-    const ignore = (e) => { e.preventDefault() };
-    const body = document.querySelector("body");
-    body.addEventListener("touchstart", ignore);
-    body.addEventListener("touchmove", ignore);
-
-    new Shake({threshold: shakeThreshold, timeout: 1000}).start();
+    //start listening for phone shakes
+    new Shake({threshold: config.shakeThreshold, timeout: 1000}).start();
     window.addEventListener("shake", this.publishRoll);
+
+    const socket = socketClient(this.props.socketEndpoint);
+    socket.on("rollResult", this.handleRollResult);
+    socket.on("canvasUpdate", this.handleCanvasUpdate);
+    this.setState({socket});
   }
 
   render() {
     return (
       <main className="app-container">
-        <Overlay messages={this.state.overlayMessages}/>
-        <PageManager availablePages={this.state.availablePages}/>
+        <Overlay rolls={this.state.rolls}/>
+        <Menu
+          settings={this.state.settings}
+          onSettingsChange={this.handleSettingsChanged}
+          onRoll={this.publishRoll}
+        />
+        <CanvasPage canvasData={this.state.canvasData}/>
       </main>
     );
   }
 }
 
-/*
-<pre>
-  <code>
-    {JSON.stringify(this.state, null, 2)}
-  </code>
-</pre>
-*/
-
-ReactDOM.render(<App/>, document.querySelector("#mountpoint"));
+ReactDOM.render(
+  <App socketEndpoint={config.socketEndpoint}/>,
+  document.querySelector("#mountpoint")
+);

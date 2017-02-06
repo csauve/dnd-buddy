@@ -1,22 +1,21 @@
 @font-face {
   font-family: "Roboto";
-  src: url("vendor/fonts/Roboto/Roboto-Medium.ttf") format("truetype")
+  src: url("vendor/fonts/Roboto-Medium.ttf") format("truetype")
 }
 
 @font-face {
   font-family: "Roboto_Slab";
-  src: url("vendor/fonts/Roboto_Slab/RobotoSlab-Regular.ttf") format("truetype")
+  src: url("vendor/fonts/RobotoSlab-Regular.ttf") format("truetype")
 }
 
-@mixin backdrop-filter($filter) {
-  -webkit-backdrop-filter: $filter;
-  -moz-backdrop-filter: $filter;
-  -ms-backdrop-filter: $filter;
-  backdrop-filter: $filter;
+@mixin vendor-prefix($name, $value) {
+  @each $vendor in ('-webkit-', '-moz-', '-ms-', '-o-', '') {
+    #{$vendor}#{$name}: #{$value};
+  }
 }
 
 $main-font-family: "Roboto", Arial, sans-serif;
-$main-font-size: 20pt;
+$main-font-size: 14pt;
 
 $title-font-size: 28pt;
 $title-font-family: "Roboto_Slab", Arial, sans-serif;
@@ -26,29 +25,12 @@ $giant-font-size: 48pt;
 
 $interface-bg: #fff;
 $interface-border: 1px solid #000;
+$interface-padding: 8px;
 
-$floating-interface-bg: rgba(255,255,255,0.5);
-$floating-interface-radius: 8px;
-
-.panel {
-  background: $interface-bg;
-  border: $interface-border;
-  border-radius: $floating-interface-radius;
-
-  &.floating {
-    background: $floating-interface-bg;
-    @include backdrop-filter(blur(5px));
-  }
-}
-
-.panel-body {
-  padding: $title-padding;
-  display: block;
-}
-
-.panel-header {
-  border-bottom: $interface-border;
-  display: block;
-  padding: $title-padding;
-  font-size: $title-font-size;
-}
+//todo: sort/dedupe these
+$anim-period: 0.4s;
+$text-color: #333;
+$text-color-faint: lighten($text-color, 40%);
+$accent-color: #3DA675;
+$page-background: #e5ffc4;
+$light-text-color: #fff;

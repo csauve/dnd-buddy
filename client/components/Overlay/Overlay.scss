@@ -9,18 +9,26 @@
     display: block;
     position: relative;
     top: 30%;
-    margin: 0 auto;
-    width: 30%;
     list-style: none;
     text-align: center;
-
 
     .overlay-message {
       margin-bottom: $title-padding;
 
+      ul.message-details {
+        vertical-align: middle;
+        display: inline-block;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
       .message-content {
+        display: inline-block;
+        vertical-align: middle;
         font-family: $title-font-family;
         font-size: $giant-font-size;
+        margin-left: $interface-padding;
       }
     }
   }

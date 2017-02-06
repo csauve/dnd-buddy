@@ -6,6 +6,7 @@
 
   .drawing-canvas {
     pointer-events: all;
+    touch-action: none;
     border: 1px solid red;
   }
 }
