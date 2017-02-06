@@ -1,13 +1,25 @@
 import React, {Component} from "react";
 import elementResizeEvent from "element-resize-event";
 
+const config = {
+  canvasWidth: 1000,
+  canvasHeight: 1000,
+  zoomScalar: 0.001,
+  maxScaleFactor: 10,
+  minScaleFactor: 0.1
+};
+
+const clamp = function(x, min, max) {
+  return Math.min(max, Math.max(min, x));
+};
+
 export default class CanvasPage extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
       viewCenter: {x: 0, y: 0},
-      zoomLevel: 1
+      scaleFactor: 1
     };
   }
 
@@ -52,24 +64,22 @@ export default class CanvasPage extends Component {
   }
 
   handleScroll = (e) => {
-    console.log("handleScroll");
-    console.log(e);
+    const newScaleFactor = clamp(
+      Math.exp(Math.log(this.state.scaleFactor) + (-e.deltaY * config.zoomScalar)),
+      config.minScaleFactor,
+      config.maxScaleFactor
+    );
+
+    this.setState({
+      scaleFactor: newScaleFactor
+    });
+
     e.preventDefault();
     return false;
   }
 
-  resizeCanvas = () => {
-    this.refs.canvas.width = this.refs.canvasPage.clientWidth;
-    this.refs.canvas.height = this.refs.canvasPage.clientHeight;
-  }
-
-  renderCanvas = () => {
-
-  }
-
   componentDidMount() {
     const canvas = this.refs.canvas;
-
     canvas.setAttribute("touch-action", "none"); //required for polyfill
     canvas.addEventListener("pointermove", this.handlePointerMove, false);
     canvas.addEventListener("pointerdown", this.handlePointerDown, false);
@@ -79,17 +89,23 @@ export default class CanvasPage extends Component {
     canvas.addEventListener("pointerenter", this.handlePointerEnter, false);
     canvas.addEventListener("pointerleave", this.handlePointerLeave, false);
     canvas.addEventListener("pointercancel", this.handlePointerCancel, false);
-    canvas.addEventListener("mousewheel", this.handleScroll, false);
-    canvas.addEventListener("DOMMouseScroll", this.handleScroll, false);
 
-    elementResizeEvent(this.refs.canvasPage, this.resizeCanvas);
-    this.resizeCanvas();
+    const canvasPage = this.refs.canvasPage;
+    canvasPage.addEventListener("mousewheel", this.handleScroll, false);
+    canvasPage.addEventListener("DOMMouseScroll", this.handleScroll, false);
   }
 
   render() {
     return (
       <div className="canvas-page" ref="canvasPage">
-        <canvas className="drawing-canvas" ref="canvas"/>
+        <canvas className="drawing-canvas" ref="canvas"
+          style={{
+            width: `${this.state.scaleFactor * 100}%`,
+            height: `${this.state.scaleFactor * 100}%`
+          }}
+          width={config.canvasWidth}
+          height={config.canvasHeight}
+        />
       </div>
     );
   }
