@@ -5,9 +5,23 @@ const socketIo = require("socket.io");
 const http = require("http");
 const uuid = require("uuid");
 const Roll = require("roll");
+const Canvas = require("canvas");
 
 const roll = new Roll();
-const canvasData = {};
+const canvas = new Canvas(config.canvas.width, config.canvas.height);
+const ctx = canvas.getContext("2d");
+ctx.fillStyle = "#e5ffc4";
+ctx.clearRect(0, 0, config.canvas.width, config.canvas.height);
+
+const getCanvasData = function() {
+  return canvas.toDataURL();
+};
+
+const setCanvasData = function(canvasData) {
+  const img = new Canvas.Image();
+  img.src = canvasData;
+  ctx.drawImage(img, 0, 0, config.canvas.width, config.canvas.height);
+};
 
 const app = express();
 const server = http.createServer(app);
@@ -17,11 +31,15 @@ app.use("/", serveStatic(config.server.staticDir, {index: ["index.html"]}));
 
 io.on("connection", function(socket) {
   console.log("Client socket connected");
+  socket.emit("canvasDataMsg", {
+    userName: null,
+    canvasData: getCanvasData()
+  });
 
-  socket.emit("canvasData", canvasData);
-
-  socket.on("canvasUpdate", function(update) {
-    io.emit("canvasUpdate", update);
+  socket.on("canvasDataMsg", function(canvasDataMsg) {
+    console.log(`Canvas data received from ${canvasDataMsg.userName}. Broadcasting to other sockets`);
+    socket.broadcast.emit("canvasDataMsg", canvasDataMsg);
+    setCanvasData(canvasDataMsg.canvasData);
   });
 
   socket.on("roll", function(rollReq) {

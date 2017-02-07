@@ -6,6 +6,7 @@ import Menu from "./components/menu/Menu.jsx";
 import uuid from "uuid";
 import Shake from "shake.js";
 import socketClient from "socket.io-client";
+import ee from "event-emitter";
 
 const config = {
   rollMessageDuration: 3000,
@@ -21,10 +22,10 @@ class App extends Component {
       defaultRoll: "d20",
       activeMenu: "name"
     },
-    canvasData: null
+    canvasDataTopic: ee({})
   }
 
-  handleRollResult = (result) => {
+  handleSocketRollResult = (result) => {
     this.setState({
       rolls: this.state.rolls.concat([result])
     });
@@ -50,8 +51,15 @@ class App extends Component {
     this.setState({settings});
   }
 
-  handleCanvasUpdate = (update) => {
-    console.log("received canvas update");
+  publishCanvasDataMsg = (canvasData) => {
+    this.state.socket.emit("canvasDataMsg", {
+      userName: this.state.settings.userName,
+      canvasData: canvasData
+    });
+  }
+
+  handleSocketCanvasDataMsg = (canvasDataMsg) => {
+    this.state.canvasDataTopic.emit("canvasDataMsg", canvasDataMsg);
   }
 
   componentDidMount() {
@@ -60,8 +68,8 @@ class App extends Component {
     window.addEventListener("shake", this.publishRoll);
 
     const socket = socketClient(this.props.socketEndpoint);
-    socket.on("rollResult", this.handleRollResult);
-    socket.on("canvasUpdate", this.handleCanvasUpdate);
+    socket.on("rollResult", this.handleSocketRollResult);
+    socket.on("canvasDataMsg", this.handleSocketCanvasDataMsg);
     this.setState({socket});
   }
 
@@ -74,7 +82,11 @@ class App extends Component {
           onSettingsChange={this.handleSettingsChanged}
           onRoll={this.publishRoll}
         />
-        <CanvasPage canvasData={this.state.canvasData}/>
+        <CanvasPage
+          settings={this.state.settings}
+          onUpdate={this.publishCanvasDataMsg}
+          canvasDataTopic={this.state.canvasDataTopic}
+        />
       </main>
     );
   }

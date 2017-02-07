@@ -14,6 +14,8 @@
 
     .overlay-message {
       margin-bottom: $title-padding;
+      color: $light-text-color;
+      background: $text-color;
 
       ul.message-details {
         vertical-align: middle;

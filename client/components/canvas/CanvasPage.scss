@@ -7,7 +7,27 @@
   .drawing-canvas {
     pointer-events: all;
     touch-action: none;
-    border: 1px solid red;
     position: absolute;
+    background: $page-background;
+    box-shadow: 1px 1px 4px 4px rgba(0,0,0,0.02);
+    transform: translate(-50%, -50%);
+
+    &.pen, &.eraser {
+      cursor: crosshair;
+    }
+  }
+
+  .peer-name {
+    position: absolute;
+    z-index: 5;
+    left: 0;
+    bottom: 40px;
+    padding: $interface-padding*2;
+    opacity: 0;
+    transition: opacity $anim-period*2;
+
+    &.visible {
+      opacity: 1;
+    }
   }
 }
