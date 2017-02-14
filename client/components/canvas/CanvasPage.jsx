@@ -71,12 +71,14 @@ export default class CanvasPage extends Component {
       ctx.stroke();
 
       this.setState({prevPoint: canvasPoint});
-      this.props.onUpdate(this.refs.canvas.toDataURL());
     }
   }
 
   handlePointerStop = (e) => {
-    this.setState({isDrawing: false});
+    if (this.state.isDrawing) {
+      this.props.onUpdate(this.refs.canvas.toDataURL());
+      this.setState({isDrawing: false});
+    }
   }
 
   handleScroll = (e) => {

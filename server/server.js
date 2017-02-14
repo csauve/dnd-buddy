@@ -37,12 +37,13 @@ io.on("connection", function(socket) {
   });
 
   socket.on("canvasDataMsg", function(canvasDataMsg) {
-    console.log(`Canvas data received from ${canvasDataMsg.userName}. Broadcasting to other sockets`);
+    console.log("Broadcasting canvas data received from " + canvasDataMsg.userName);
     socket.broadcast.emit("canvasDataMsg", canvasDataMsg);
     setCanvasData(canvasDataMsg.canvasData);
   });
 
   socket.on("roll", function(rollReq) {
+    if (!roll.validate(rollReq.roll)) return;
     io.emit("rollResult", {
       rollId: uuid.v4(),
       roll: rollReq.roll,
@@ -56,5 +57,5 @@ io.on("connection", function(socket) {
   });
 });
 
-console.log(`HTTP server listening on ${config.server.port}`);
+console.log("HTTP server listening on port " + config.server.port);
 server.listen(config.server.port);
